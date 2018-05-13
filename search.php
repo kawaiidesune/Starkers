@@ -1,28 +1,29 @@
 <?php
 /**
- * The template for displaying Search Results pages.
+ * Search results page
+ * 
+ * Please see /external/starkers-utilities.php for info on Starkers_Utilities::get_template_parts()
  *
- * @package WordPress
- * @subpackage Starkers
- * @since Starkers 3.0
+ * @package 	WordPress
+ * @subpackage 	Starkers
+ * @since 		Starkers 4.0
  */
-
-get_header(); ?>
-
-<?php if ( have_posts() ) : ?>
-				<h1><?php printf( __( 'Search Results for: %s', 'twentyten' ), '' . get_search_query() . '' ); ?></h1>
-				<?php
-				/* Run the loop for the search to output the results.
-				 * If you want to overload this in a child theme then include a file
-				 * called loop-search.php and that will be used instead.
-				 */
-				 get_template_part( 'loop', 'search' );
-				?>
-<?php else : ?>
-					<h2><?php _e( 'Nothing Found', 'twentyten' ); ?></h2>
-					<p><?php _e( 'Sorry, but nothing matched your search criteria. Please try again with some different keywords.', 'twentyten' ); ?></p>
-					<?php get_search_form(); ?>
+Starkers_Utilities::get_template_parts( array( 'parts/shared/html-header', 'parts/shared/header' ) );
+if ( have_posts() ): ?>
+<h2><?php printf(__("Search Results for '%s'",'starkers'), get_search_query()); ?></h2>	
+<ol>
+<?php while ( have_posts() ) : the_post(); ?>
+	<li>
+		<article>
+			<h2><a href="<?php esc_url( the_permalink() ); ?>" title="<?php printf(__('Permalink to %s','starkers'), get_the_title()); ?>" rel="bookmark"><?php the_title(); ?></a></h2>
+			<time datetime="<?php the_time( 'Y-m-d' ); ?>" pubdate><?php the_date(); ?> <?php the_time(); ?></time> <?php comments_popup_link('Leave a Comment', '1 Comment', '% Comments'); ?>
+			<?php the_content(); ?>
+		</article>
+	</li>
+<?php endwhile; ?>
+</ol>
+<?php else: ?>
+<h2><?php printf(__("No results found for '%s'",'starkers'), get_search_query()); ?></h2>
 <?php endif; ?>
 
-<?php get_sidebar(); ?>
-<?php get_footer(); ?>
+<?php Starkers_Utilities::get_template_parts( array( 'parts/shared/footer','parts/shared/html-footer' ) ); ?>

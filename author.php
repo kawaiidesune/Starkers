@@ -1,51 +1,38 @@
 <?php
 /**
- * The template for displaying Author Archive pages.
+ * The template for displaying Author Archive pages
  *
- * @package WordPress
- * @subpackage Starkers
- * @since Starkers 3.0
+ * Please see /external/starkers-utilities.php for info on Starkers_Utilities::get_template_parts()
+ *
+ * @package 	WordPress
+ * @subpackage 	Starkers
+ * @since 		Starkers 4.0
  */
+Starkers_Utilities::get_template_parts( array( 'parts/shared/html-header', 'parts/shared/header' ) );
+if ( have_posts() ): the_post(); ?>
 
-get_header(); ?>
-
-<?php
-	/* Queue the first post, that way we know who
-	 * the author is when we try to get their name,
-	 * URL, description, avatar, etc.
-	 *
-	 * We reset this later so we can run the loop
-	 * properly with a call to rewind_posts().
-	 */
-	if ( have_posts() )
-		the_post();
-?>
-
-				<h1><?php printf( __( 'Author Archives: %s', 'twentyten' ), "<a class='url fn n' href='" . get_author_posts_url( get_the_author_meta( 'ID' ) ) . "' title='" . esc_attr( get_the_author() ) . "' rel='me'>" . get_the_author() . "</a>" ); ?></h1>
+<h2><?php printf(__('Author Archives: %s','starkers'), get_the_author()); ?></h2>
 
 <?php
-// If a user has filled out their description, show a bio on their entries.
-if ( get_the_author_meta( 'description' ) ) : ?>
+if ( get_the_author_meta( 'description' ) ) :
+	echo get_avatar( get_the_author_meta( 'user_email' ) ); ?>
+<h3><?php printf(__('About %s','starkers'), get_the_author()) ; ?></h3>
+<?php the_author_meta( 'description' );
+endif; ?>
 
-							<?php echo get_avatar( get_the_author_meta( 'user_email' ), apply_filters( 'twentyten_author_bio_avatar_size', 60 ) ); ?>
-							<h2><?php printf( __( 'About %s', 'twentyten' ), get_the_author() ); ?></h2>
-							<?php the_author_meta( 'description' ); ?>
+<ol>
+<?php rewind_posts(); while ( have_posts() ) : the_post(); ?>
+	<li>
+		<article>
+			<h2><a href="<?php esc_url( the_permalink() ); ?>" title="<?php printf(__('Permalink to %s','starkers'), get_the_title()); ?>" rel="bookmark"><?php the_title(); ?></a></h2>
+			<time datetime="<?php the_time( 'Y-m-d' ); ?>" pubdate><?php the_date(); ?> <?php the_time(); ?></time> <?php comments_popup_link('Leave a Comment', '1 Comment', '% Comments'); ?>
+			<?php the_content(); ?>
+		</article>
+	</li>
+<?php endwhile; ?>
+</ol>
 
-<?php endif; ?>
-
-<?php
-	/* Since we called the_post() above, we need to
-	 * rewind the loop back to the beginning that way
-	 * we can run the loop properly, in full.
-	 */
-	rewind_posts();
-
-	/* Run the loop for the author archive page to output the authors posts
-	 * If you want to overload this in a child theme then include a file
-	 * called loop-author.php and that will be used instead.
-	 */
-	 get_template_part( 'loop', 'author' );
-?>
-
-<?php get_sidebar(); ?>
-<?php get_footer(); ?>
+<?php else: ?>
+<h2><?php printf(__('No posts to display for %','starkers'), get_the_author()); ?></h2>	
+<?php endif;
+Starkers_Utilities::get_template_parts( array( 'parts/shared/footer','parts/shared/html-footer' ) ); ?>
