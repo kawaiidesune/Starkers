@@ -1,6 +1,5 @@
 # Starkers
-Originally created by Viewport Industries, Ltd.
-Currently maintained by Véronique Bellamy.
+Currently maintained by Véronique Bellamy (@kawaiidesune). Originally created by Elliot Jay Stocks (@elliotjaystocks) and Keir Whitaker (@keirwhitaker), formerly of Viewport Industries, Ltd.
 
 ## What is Starkers?
 Starkers is a bare bones theme for WordPress and is compatible with WordPress 4.9.8. It is created to be a starting point for a theme designer. It's free of all style, presentational elements, and non-semantic markup. In other words, Starkers is a perfect 'blank slate' for all your WordPress projects.
